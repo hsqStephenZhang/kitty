@@ -12,10 +12,6 @@ jobs:
   build:
     name: macOS DMG and kitten
     runs-on: macos-latest
-    env:
-      # macos-latest currently runs a newer macOS than the target machines.
-      # Keep the binaries loadable on macOS 15.x.
-      MACOSX_DEPLOYMENT_TARGET: '15.0'
     steps:
       - name: Checkout source code
         uses: actions/checkout@v7.0.1
