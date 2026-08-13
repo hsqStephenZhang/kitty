@@ -4370,12 +4370,14 @@ add_uri_list_drag_items(
             NSString *filename = [url lastPathComponent];
             NSURLComponents *components = [NSURLComponents componentsWithString:line];
             bool is_dir = [components.percentEncodedPath hasSuffix:@"/"];
+            UTType *file_type = is_dir ? UTTypeDirectory : [UTType typeWithFilenameExtension:filename.pathExtension];
+            if (!file_type || (!is_dir && ![file_type conformsToType:UTTypeData])) file_type = UTTypeData;
             GLFWFilePromiseProviderDelegate *delegate = [[[GLFWFilePromiseProviderDelegate alloc] initWithWindow:window
                                                                                                         mimeType:buf
                                                                                                         fileName:[filename UTF8String]
                                                                                                            isDir:is_dir
                                                                                                       instanceId:_glfw.drag.instance_id] autorelease];
-            NSFilePromiseProvider *provider = [[[NSFilePromiseProvider alloc] initWithFileType:UTTypeFileURL.identifier delegate:delegate] autorelease];
+            NSFilePromiseProvider *provider = [[[NSFilePromiseProvider alloc] initWithFileType:file_type.identifier delegate:delegate] autorelease];
             dragItem = [[[NSDraggingItem alloc] initWithPasteboardWriter:provider] autorelease];
         } else dragItem = [[[NSDraggingItem alloc] initWithPasteboardWriter:url] autorelease];
         int err = add_drag_item(window, dragItems, dragItem, thumbnail);
