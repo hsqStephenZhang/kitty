@@ -31,12 +31,6 @@ jobs:
       - name: Install kitty build dependencies
         run: python3 .github/workflows/ci.py build
 
-      - name: Install documentation dependencies
-        run: python3 -m pip install -r docs/requirements.txt
-
-      - name: Generate documentation and man pages
-        run: make docs
-
       - name: Build macOS application bundle
         env:
           SLANGC: /tmp/slang/bin/slangc
